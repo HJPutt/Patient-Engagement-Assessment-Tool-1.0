@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lived Experience Engagement Scoring Tool</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f8;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+input, select, textarea{
+    width:100%;
+    box-sizing:border-box;
+    padding:10px;
+    margin-top:5px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+textarea{
+    min-height:100px;
+}
+
+.result{
+    border-left:8px solid;
+}
+
+.green{
+    background:#e8f5e9;
+    border-color:#2e7d32;
+}
+
+.amber{
+    background:#fff8e1;
+    border-color:#f9a825;
+}
+
+.red{
+    background:#ffebee;
+    border-color:#c62828;
+}
+
+button{
+    background:#003087;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#002060;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+<h1>Lived Experience Engagement Scoring Tool</h1>
+<p>Complete the questions below to determine the appropriate level of engagement.</p>
+</div>
+
+<div class="card">
+<h2>Project Details</h2>
+
+<div class="grid">
+<div>
+<label>Project Title</label>
+<input id="projectTitle">
+</div>
+
+<div>
+<label>Project Lead</label>
+<input id="projectLead">
+</div>
+
+<div>
+<label>Date Completed</label>
+<input type="date" id="dateCompleted">
+</div>
+</div>
+</div>
+
+<div id="questions"></div>
+
+<div id="resultCard" class="card result">
+<h2>Total Score: <span id="totalScore">5</span>/25</h2>
+
+<p id="trafficLight"></p>
+
+<h3>Level</h3>
+<p id="level"></p>
+
+<h3>What it really means</h3>
+<p id="meaning"></p>
+
+<h3>Examples of engagement</h3>
+<ul id="engagement"></ul>
+
+<button onclick="downloadPDF()">Download Result as PDF</button>
+</div>
+
+</div>
+
+<script>
+
+const questions = [
+{
+title:"1. Clarity – How well-defined is the problem?"
+},
+{
+title:"2. Impact – What is the magnitude of effect on patients?"
+},
+{
+title:"3. Representation Gap – Are there any voices missing?"
+},
+{
+title:"4. Complexity – How complex is the system/journey?"
+},
+{
+title:"5. Assumption Risk – What is the risk of getting it wrong without lived experience?"
+}
+];
+
+const container = document.getElementById("questions");
+
+questions.forEach((q,i)=>{
+
+const card=document.createElement("div");
+card.className="card";
+
+card.innerHTML=`
+<h2>${q.title}</h2>
+
+<select class="score" onchange="calculateScore()">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+</select>
+
+<label>Rationale / Comments</label>
+<textarea id="comment${i}"></textarea>
+`;
+
+container.appendChild(card);
+
+});
+
+function calculateScore(){
+
+let score=0;
+
+document.querySelectorAll(".score").forEach(x=>{
+score += Number(x.value);
+});
+
+document.getElementById("totalScore").innerText=score;
+
+const resultCard=document.getElementById("resultCard");
+
+let icon="";
+let level="";
+let meaning="";
+let engagement=[];
+
+if(score <= 8){
+
+icon="🟢 Green";
+level="Light validation required";
+meaning="You mostly understand this but sense check with users.";
+engagement=["Surveys","Feedback"];
+
+resultCard.className="card result green";
+
+}
+else if(score <=16){
+
+icon="🟠 Amber";
+level="Targeted engagement required";
+meaning="You have gaps so involve people to refine understanding and learn from them.";
+engagement=[
+"15 Steps",
+"Interviews & Workshops",
+"Mapping",
+"Story Board"
+];
+
+resultCard.className="card result amber";
+
+}
+else{
+
+icon="🔴 Red";
+level="Deep co-production required";
+meaning="You don't understand this well enough yet so users must shape the problem.";
+engagement=[
+"15 Steps",
+"Interviews & Workshops",
+"Mapping",
+"Story Board",
+"Design with People / Co-design"
+];
+
+resultCard.className="card result red";
+
+}
+
+document.getElementById("trafficLight").innerHTML="<strong>Traffic Light:</strong> " + icon;
+document.getElementById("level").innerText=level;
+document.getElementById("meaning").innerText=meaning;
+
+const ul=document.getElementById("engagement");
+ul.innerHTML="";
+
+engagement.forEach(item=>{
+const li=document.createElement("li");
+li.innerText=item;
+ul.appendChild(li);
+});
+
+}
+
+async function downloadPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const doc=new jsPDF();
+
+const score=document.getElementById("totalScore").innerText;
+
+doc.setFontSize(16);
+doc.text("Lived Experience Engagement Scoring Result",10,10);
+
+doc.setFontSize(11);
+doc.text("Project Title: " + document.getElementById("projectTitle").value,10,25);
+doc.text("Project Lead: " + document.getElementById("projectLead").value,10,35);
+doc.text("Date Completed: " + document.getElementById("dateCompleted").value,10,45);
+
+doc.text("Total Score: " + score + "/25",10,60);
+
+doc.save("Engagement-Scoring-Result.pdf");
+
+}
+
+document.getElementById("dateCompleted").value =
+new Date().toISOString().split("T")[0];
+
+calculateScore();
+
+</script>
+
+</body>
+</html>
