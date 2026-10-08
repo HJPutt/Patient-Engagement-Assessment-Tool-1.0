@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lived Experience Engagement Scoring Tool</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 body{
@@ -127,7 +126,6 @@ button:hover{
 <h3>Examples of engagement</h3>
 <ul id="engagement"></ul>
 
-<button onclick="downloadPDF()">Download Result as PDF</button>
 </div>
 
 </div>
@@ -252,27 +250,6 @@ ul.appendChild(li);
 
 }
 
-async function downloadPDF(){
-
-const { jsPDF } = window.jspdf;
-
-const doc=new jsPDF();
-
-const score=document.getElementById("totalScore").innerText;
-
-doc.setFontSize(16);
-doc.text("Lived Experience Engagement Scoring Result",10,10);
-
-doc.setFontSize(11);
-doc.text("Project Title: " + document.getElementById("projectTitle").value,10,25);
-doc.text("Project Lead: " + document.getElementById("projectLead").value,10,35);
-doc.text("Date Completed: " + document.getElementById("dateCompleted").value,10,45);
-
-doc.text("Total Score: " + score + "/25",10,60);
-
-doc.save("Engagement-Scoring-Result.pdf");
-
-}
 
 document.getElementById("dateCompleted").value =
 new Date().toISOString().split("T")[0];
