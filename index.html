@@ -149,6 +149,74 @@ body.compact-mode #assessmentSummary div{
     }
 }
 
+/* Compact summary is hidden in normal view */
+#compactReport{
+    display:none;
+}
+
+/* In compact mode, hide the normal report sections */
+body.compact-mode #resultCard > *:not(.report-toolbar):not(#compactReport){
+    display:none;
+}
+
+/* Show the purpose-built compact report */
+body.compact-mode #compactReport{
+    display:block;
+}
+
+body.compact-mode #resultCard{
+    padding:15px;
+    margin:0;
+    box-shadow:none;
+    border-radius:5px;
+}
+
+.compact-project-line,
+.compact-result-line,
+.compact-engagement-line{
+    margin:0 0 8px 0;
+    line-height:1.4;
+}
+
+.compact-result-line{
+    font-size:18px;
+}
+
+.compact-engagement-line{
+    padding-bottom:10px;
+    border-bottom:1px solid #999999;
+}
+
+.compact-assessments{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:8px 20px;
+}
+
+.compact-item{
+    padding:7px;
+    border:1px solid #bbbbbb;
+    border-radius:5px;
+    background:rgba(255,255,255,0.65);
+    overflow-wrap:anywhere;
+}
+
+.compact-item-title{
+    font-weight:bold;
+    margin-bottom:4px;
+}
+
+.compact-item-comments{
+    margin:0;
+    line-height:1.35;
+}
+
+@media (max-width:700px){
+    .compact-assessments{
+        grid-template-columns:1fr;
+    }
+}
+
 </style>
 </head>
 
@@ -197,6 +265,8 @@ Complete the questions below to determine the appropriate level of engagement.
         Show Compact Report
     </button>
 </div>
+
+<div id="compactReport"></div>
 
 <div class="report-details">
     <h2>Project Details</h2>
@@ -412,16 +482,107 @@ function updateProjectDetails(){
 }
 
 
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
 function toggleCompactView(){
 
-    const isCompact =
-        document.body.classList.toggle("compact-mode");
+    const body = document.body;
+    const button = document.getElementById("compactViewButton");
+    const compactReport = document.getElementById("compactReport");
 
-    const button =
-        document.getElementById("compactViewButton");
+    const isEnteringCompactMode =
+        !body.classList.contains("compact-mode");
 
-    if(isCompact){
+    if(isEnteringCompactMode){
 
+        const projectTitle =
+            document.getElementById("projectTitle").value || "Not provided";
+
+        const projectLead =
+            document.getElementById("projectLead").value || "Not provided";
+
+        const dateCompleted =
+            document.getElementById("reportDateCompleted").innerText ||
+            "Not provided";
+
+        const totalScore =
+            document.getElementById("totalScore").innerText;
+
+        const trafficLight =
+            document.getElementById("trafficLight").innerText
+                .replace("Traffic Light:", "")
+                .trim();
+
+        const engagementLevel =
+            document.getElementById("level").innerText;
+
+        const engagementExamples =
+            Array.from(document.querySelectorAll("#engagement li"))
+                .map(item => item.innerText)
+                .join(" • ");
+
+        let assessmentItems = "";
+
+        questions.forEach((question, index) => {
+
+            const score =
+                document.querySelectorAll(".score")[index].value;
+
+            const comments =
+                document.getElementById("comment" + index).value ||
+                "No comments provided";
+
+            assessmentItems += `
+                <div class="compact-item">
+                    <div class="compact-item-title">
+                        ${escapeHTML(question.name)} | ${escapeHTML(score)}
+                    </div>
+
+                    <p class="compact-item-comments">
+                        <strong>Comments:</strong>
+                        ${escapeHTML(comments)}
+                    </p>
+                </div>
+            `;
+        });
+
+        compactReport.innerHTML = `
+            <p class="compact-project-line">
+                <strong>Project:</strong> ${escapeHTML(projectTitle)}
+                &nbsp; | &nbsp;
+                <strong>Lead:</strong> ${escapeHTML(projectLead)}
+                &nbsp; | &nbsp;
+                <strong>Date:</strong> ${escapeHTML(dateCompleted)}
+            </p>
+
+            <p class="compact-result-line">
+                <strong>Score:</strong> ${escapeHTML(totalScore)}/25
+                &nbsp; | &nbsp;
+                ${escapeHTML(trafficLight)}
+                <strong>${escapeHTML(engagementLevel)}</strong>
+            </p>
+
+            <p class="compact-engagement-line">
+                <strong>Examples of engagement:</strong>
+                ${escapeHTML(engagementExamples)}
+            </p>
+
+            <div class="compact-assessments">
+                ${assessmentItems}
+            </div>
+        `;
+
+        body.classList.add("compact-mode");
         button.innerText = "Return to Full Assessment";
 
         document.getElementById("resultCard").scrollIntoView({
@@ -429,9 +590,9 @@ function toggleCompactView(){
             block:"start"
         });
 
-    }
-    else{
+    } else {
 
+        body.classList.remove("compact-mode");
         button.innerText = "Show Compact Report";
 
         window.scrollTo({
