@@ -95,17 +95,17 @@ button:hover{
 <div class="grid">
 <div>
 <label>Project Title</label>
-<input id="projectTitle">
+<input id="projectTitle" oninput="calculateScore()">
 </div>
 
 <div>
 <label>Project Lead</label>
-<input id="projectLead">
+<input id="projectLead" oninput="calculateScore()">
 </div>
 
 <div>
 <label>Date Completed</label>
-<input type="date" id="dateCompleted">
+<input type="date" id="dateCompleted" onchange="calculateScore()">
 </div>
 </div>
 </div>
@@ -113,6 +113,28 @@ button:hover{
 <div id="questions"></div>
 
 <div id="resultCard" class="card result">
+
+<div class="report-details">
+    <h2>Project Details</h2>
+
+    <p>
+        <strong>Project Title:</strong>
+        <span id="reportProjectTitle"></span>
+    </p>
+
+    <p>
+        <strong>Project Lead:</strong>
+        <span id="reportProjectLead"></span>
+    </p>
+
+    <p>
+        <strong>Date Completed:</strong>
+        <span id="reportDateCompleted"></span>
+    </p>
+</div>
+
+<hr style="margin:25px 0;">
+
 <h2>Total Score: <span id="totalScore">5</span>/25</h2>
 
 <p id="trafficLight"></p>
@@ -279,6 +301,15 @@ questions.forEach((q, i) => {
 });
 
 document.getElementById("assessmentSummary").innerHTML = summaryHTML;
+
+document.getElementById("reportProjectTitle").innerText =
+    document.getElementById("projectTitle").value || "Not provided";
+
+document.getElementById("reportProjectLead").innerText =
+    document.getElementById("projectLead").value || "Not provided";
+
+document.getElementById("reportDateCompleted").innerText =
+    document.getElementById("dateCompleted").value || "Not provided";
 
 }
 
