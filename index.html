@@ -312,19 +312,20 @@ function updateProjectDetails(){
     document.getElementById("reportProjectLead").innerText =
         document.getElementById("projectLead").value || "Not provided";
 
-const dateValue = document.getElementById("dateCompleted").value;
+    const dateValue = document.getElementById("dateCompleted").value;
 
-let formattedDate = "Not provided";
+    if (dateValue) {
+        const parts = dateValue.split("-");
+        const formattedDate = parts[2] + "/" + parts[1] + "/" + parts[0];
 
-if (dateValue) {
-    const [year, month, day] = dateValue.split("-");
-    formattedDate = `${day}/${month}/${year}`;
+        document.getElementById("reportDateCompleted").innerText =
+            formattedDate;
+    } else {
+        document.getElementById("reportDateCompleted").innerText =
+            "Not provided";
+    }
+
 }
-
-document.getElementById("reportDateCompleted").innerText = formattedDate;
-
-}
-
 // Set today's date
 document.getElementById("dateCompleted").value =
 new Date().toISOString().split("T")[0];
