@@ -95,17 +95,17 @@ button:hover{
 <div class="grid">
 <div>
 <label>Project Title</label>
-<input id="projectTitle" oninput="calculateScore()">
+<input id="projectTitle" oninput="updateProjectDetails()">
 </div>
 
 <div>
 <label>Project Lead</label>
-<input id="projectLead" oninput="calculateScore()">
+<input id="projectLead" oninput="updateProjectDetails()">
 </div>
 
 <div>
 <label>Date Completed</label>
-<input type="date" id="dateCompleted" onchange="calculateScore()">
+<input type="date" id="dateCompleted" onchange="updateProjectDetails()">
 </div>
 </div>
 </div>
@@ -302,24 +302,27 @@ questions.forEach((q, i) => {
 
 document.getElementById("assessmentSummary").innerHTML = summaryHTML;
 
-document.getElementById("reportProjectTitle").innerText =
-    document.getElementById("projectTitle").value || "Not provided";
-
-document.getElementById("reportProjectLead").innerText =
-    document.getElementById("projectLead").value || "Not provided";
-
-document.getElementById("reportDateCompleted").innerText =
-    document.getElementById("dateCompleted").value || "Not provided";
-
 }
 
+function updateProjectDetails(){
+
+    document.getElementById("reportProjectTitle").innerText =
+        document.getElementById("projectTitle").value || "Not provided";
+
+    document.getElementById("reportProjectLead").innerText =
+        document.getElementById("projectLead").value || "Not provided";
+
+    document.getElementById("reportDateCompleted").innerText =
+        document.getElementById("dateCompleted").value || "Not provided";
+
+}
 
 // Set today's date
 document.getElementById("dateCompleted").value =
 new Date().toISOString().split("T")[0];
 
-// Populate the report
 calculateScore();
+updateProjectDetails();
 
 </script>
 
