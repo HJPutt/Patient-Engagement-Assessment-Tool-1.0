@@ -77,6 +77,78 @@ button:hover{
     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
     gap:15px;
 }
+
+.report-toolbar{
+    text-align:right;
+    margin-bottom:15px;
+}
+
+/* Compact report view */
+body.compact-mode{
+    padding:10px;
+    background:white;
+}
+
+body.compact-mode .container{
+    max-width:1400px;
+}
+
+/* Hide the introduction, data-entry project details and questions */
+body.compact-mode .container > .card:not(#resultCard),
+body.compact-mode #questions{
+    display:none;
+}
+
+/* Condense the report */
+body.compact-mode #resultCard{
+    padding:18px;
+    margin:0;
+    box-shadow:none;
+    border-radius:0;
+}
+
+body.compact-mode #resultCard h2,
+body.compact-mode #resultCard h3{
+    margin-top:10px;
+    margin-bottom:6px;
+}
+
+body.compact-mode #resultCard p{
+    margin:5px 0;
+}
+
+body.compact-mode #resultCard hr{
+    margin:12px 0 !important;
+}
+
+/* Put the five assessment sections into two columns */
+body.compact-mode #assessmentSummary{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:10px 24px;
+}
+
+body.compact-mode #assessmentSummary > div{
+    margin-bottom:5px !important;
+    padding:8px;
+    border:1px solid #cccccc;
+    border-radius:5px;
+    background:rgba(255,255,255,0.65);
+}
+
+/* Keep long comments inside their section */
+body.compact-mode #assessmentSummary,
+body.compact-mode #assessmentSummary div{
+    overflow-wrap:anywhere;
+}
+
+/* Use one column on smaller screens */
+@media (max-width:700px){
+    body.compact-mode #assessmentSummary{
+        grid-template-columns:1fr;
+    }
+}
+
 </style>
 </head>
 
@@ -120,6 +192,11 @@ Complete the questions below to determine the appropriate level of engagement.
 <div id="questions"></div>
 
 <div id="resultCard" class="card result">
+<div class="report-toolbar">
+    <button type="button" id="compactViewButton" onclick="toggleCompactView()">
+        Show Compact Report
+    </button>
+</div>
 
 <div class="report-details">
     <h2>Project Details</h2>
@@ -333,6 +410,40 @@ function updateProjectDetails(){
     }
 
 }
+
+
+function toggleCompactView(){
+
+    const isCompact =
+        document.body.classList.toggle("compact-mode");
+
+    const button =
+        document.getElementById("compactViewButton");
+
+    if(isCompact){
+
+        button.innerText = "Return to Full Assessment";
+
+        document.getElementById("resultCard").scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+    }
+    else{
+
+        button.innerText = "Show Compact Report";
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }
+
+}
+
+
 // Set today's date
 document.getElementById("dateCompleted").value =
 new Date().toISOString().split("T")[0];
