@@ -314,9 +314,11 @@ document.getElementById("reportDateCompleted").innerText =
 }
 
 
+// Set today's date
 document.getElementById("dateCompleted").value =
 new Date().toISOString().split("T")[0];
 
+// Populate the report
 calculateScore();
 
 </script>
