@@ -126,6 +126,11 @@ button:hover{
 <h3>Examples of engagement</h3>
 <ul id="engagement"></ul>
 
+<hr style="margin:30px 0;">
+
+<h2>Assessment Summary</h2>
+<div id="assessmentSummary"></div>
+    
 </div>
 
 </div>
@@ -134,19 +139,24 @@ button:hover{
 
 const questions = [
 {
-title:"1. Clarity – How well-defined is the problem?"
+title:"1. Clarity – How well-defined is the problem?",
+name:"Clarity"
 },
 {
-title:"2. Impact – What is the magnitude of effect on patients?"
+title:"2. Impact – What is the magnitude of effect on patients?",
+name:"Impact"
 },
 {
-title:"3. Representation Gap – Are there any voices missing?"
+title:"3. Representation Gap – Are there any voices missing?",
+name:"Representation Gap"
 },
 {
-title:"4. Complexity – How complex is the system/journey?"
+title:"4. Complexity – How complex is the system/journey?",
+name:"Complexity"
 },
 {
-title:"5. Assumption Risk – What is the risk of getting it wrong without lived experience?"
+title:"5. Assumption Risk – What is the risk of getting it wrong without lived experience?",
+name:"Assumption Risk"
 }
 ];
 
@@ -169,7 +179,7 @@ card.innerHTML=`
 </select>
 
 <label>Rationale / Comments</label>
-<textarea id="comment${i}"></textarea>
+<textarea id="comment${i}" oninput="calculateScore()"></textarea>
 `;
 
 container.appendChild(card);
@@ -247,6 +257,28 @@ const li=document.createElement("li");
 li.innerText=item;
 ul.appendChild(li);
 });
+
+let summaryHTML = "";
+
+questions.forEach((q, i) => {
+
+    const score =
+        document.querySelectorAll(".score")[i].value;
+
+    const comments =
+        document.getElementById("comment"+i).value || "No comments provided";
+
+    summaryHTML += `
+        <div style="margin-bottom:20px;">
+            <strong>${q.name}</strong><br>
+            <strong>Score:</strong> ${score}<br><br>
+            <strong>Comments:</strong><br>
+            ${comments}
+        </div>
+    `;
+});
+
+document.getElementById("assessmentSummary").innerHTML = summaryHTML;
 
 }
 
