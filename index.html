@@ -312,8 +312,16 @@ function updateProjectDetails(){
     document.getElementById("reportProjectLead").innerText =
         document.getElementById("projectLead").value || "Not provided";
 
-    document.getElementById("reportDateCompleted").innerText =
-        document.getElementById("dateCompleted").value || "Not provided";
+const dateValue = document.getElementById("dateCompleted").value;
+
+let formattedDate = "Not provided";
+
+if (dateValue) {
+    const [year, month, day] = dateValue.split("-");
+    formattedDate = `${day}/${month}/${year}`;
+}
+
+document.getElementById("reportDateCompleted").innerText = formattedDate;
 
 }
 
