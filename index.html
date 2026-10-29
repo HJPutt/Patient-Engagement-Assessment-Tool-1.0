@@ -3,15 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Lived Experience Engagement Scoring Tool</title>
 
-
 <style>
+
 body{
-    font-family: Arial, sans-serif;
+    font-family:Arial, sans-serif;
     background:#f4f6f8;
     margin:0;
     padding:20px;
+    color:#212b32;
 }
 
 .container{
@@ -27,17 +29,40 @@ body{
     box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
 
-input, select, textarea{
+h1,
+h2,
+h3{
+    color:#212b32;
+}
+
+label{
+    font-weight:bold;
+}
+
+input,
+select,
+textarea{
     width:100%;
     box-sizing:border-box;
     padding:10px;
     margin-top:5px;
-    border:1px solid #ccc;
+    border:1px solid #768692;
     border-radius:5px;
+    font:inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus{
+    outline:3px solid #ffdd00;
+    outline-offset:2px;
+    border-color:#212b32;
 }
 
 textarea{
     min-height:100px;
+    resize:vertical;
 }
 
 .result{
@@ -66,6 +91,8 @@ button{
     padding:12px 20px;
     border-radius:5px;
     cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
 }
 
 button:hover{
@@ -78,12 +105,43 @@ button:hover{
     gap:15px;
 }
 
+/* Score descriptions */
+
+.score-description{
+    background:#f4f6f8;
+    border-left:4px solid #003087;
+    padding:12px 15px;
+    margin:12px 0 18px 0;
+    border-radius:4px;
+    font-size:14px;
+    line-height:1.45;
+}
+
+.score-description-title{
+    margin-top:0;
+    margin-bottom:10px;
+}
+
+.score-description p{
+    margin:7px 0;
+}
+
+.score-guidance{
+    margin-top:12px !important;
+    padding-top:10px;
+    border-top:1px solid #b1b4b6;
+    color:#003087;
+}
+
+/* Report toolbar */
+
 .report-toolbar{
     text-align:right;
     margin-bottom:15px;
 }
 
 /* Compact report view */
+
 body.compact-mode{
     padding:10px;
     background:white;
@@ -93,73 +151,27 @@ body.compact-mode .container{
     max-width:1400px;
 }
 
-/* Hide the introduction, data-entry project details and questions */
+/* Hide the introduction, project input fields and questions */
+
 body.compact-mode .container > .card:not(#resultCard),
 body.compact-mode #questions{
     display:none;
 }
 
-/* Condense the report */
-body.compact-mode #resultCard{
-    padding:18px;
-    margin:0;
-    box-shadow:none;
-    border-radius:0;
-}
-
-body.compact-mode #resultCard h2,
-body.compact-mode #resultCard h3{
-    margin-top:10px;
-    margin-bottom:6px;
-}
-
-body.compact-mode #resultCard p{
-    margin:5px 0;
-}
-
-body.compact-mode #resultCard hr{
-    margin:12px 0 !important;
-}
-
-/* Put the five assessment sections into two columns */
-body.compact-mode #assessmentSummary{
-    display:grid;
-    grid-template-columns:repeat(2, minmax(0, 1fr));
-    gap:10px 24px;
-}
-
-body.compact-mode #assessmentSummary > div{
-    margin-bottom:5px !important;
-    padding:8px;
-    border:1px solid #cccccc;
-    border-radius:5px;
-    background:rgba(255,255,255,0.65);
-}
-
-/* Keep long comments inside their section */
-body.compact-mode #assessmentSummary,
-body.compact-mode #assessmentSummary div{
-    overflow-wrap:anywhere;
-}
-
-/* Use one column on smaller screens */
-@media (max-width:700px){
-    body.compact-mode #assessmentSummary{
-        grid-template-columns:1fr;
-    }
-}
-
 /* Compact summary is hidden in normal view */
+
 #compactReport{
     display:none;
 }
 
-/* In compact mode, hide the normal report sections */
+/* Hide the normal report sections in compact mode */
+
 body.compact-mode #resultCard > *:not(.report-toolbar):not(#compactReport){
     display:none;
 }
 
 /* Show the purpose-built compact report */
+
 body.compact-mode #compactReport{
     display:block;
 }
@@ -189,7 +201,7 @@ body.compact-mode #resultCard{
 
 .compact-assessments{
     display:grid;
-    grid-template-columns:repeat(2, minmax(0, 1fr));
+    grid-template-columns:repeat(2,minmax(0,1fr));
     gap:8px 20px;
 }
 
@@ -212,9 +224,15 @@ body.compact-mode #resultCard{
 }
 
 @media (max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
     .compact-assessments{
         grid-template-columns:1fr;
     }
+
 }
 
 </style>
@@ -224,282 +242,457 @@ body.compact-mode #resultCard{
 
 <div class="container">
 
-<div class="card">
-<h1>Lived Experience Engagement Scoring Tool</h1>
+    <div class="card">
 
-<p>
-Complete the questions below to determine the appropriate level of engagement.
-</p>
+        <h1>Lived Experience Engagement Scoring Tool</h1>
 
-<p style="font-weight:bold; color:#b42318; margin-top:15px;">
-⚠ Important: Do not leave or refresh this page while completing the assessment, as your progress will be lost.
-</p>
-</div>
+        <p>
+            Complete the questions below to determine the appropriate level
+            of engagement.
+        </p>
 
-<div class="card">
-<h2>Project Details</h2>
+        <p style="font-weight:bold; color:#b42318; margin-top:15px;">
+            ⚠ Important: Do not leave or refresh this page while completing
+            the assessment, as your progress will be lost.
+        </p>
 
-<div class="grid">
-<div>
-<label>Project Title</label>
-<input id="projectTitle" oninput="updateProjectDetails()">
-</div>
+    </div>
 
-<div>
-<label>Project Lead</label>
-<input id="projectLead" oninput="updateProjectDetails()">
-</div>
+    <div class="card">
 
-<div>
-<label>Date Completed</label>
-<input type="date" id="dateCompleted" onchange="updateProjectDetails()">
-</div>
-</div>
-</div>
+        <h2>Project Details</h2>
 
-<div id="questions"></div>
+        <div class="grid">
 
-<div id="resultCard" class="card result">
-<div class="report-toolbar">
-    <button type="button" id="compactViewButton" onclick="toggleCompactView()">
-        Show Compact Report
-    </button>
-</div>
+            <div>
+                <label for="projectTitle">Project Title</label>
 
-<div id="compactReport"></div>
+                <input
+                    id="projectTitle"
+                    type="text"
+                    oninput="updateProjectDetails()"
+                >
+            </div>
 
-<div class="report-details">
-    <h2>Project Details</h2>
+            <div>
+                <label for="projectLead">Project Lead</label>
 
-    <p>
-        <strong>Project Title:</strong>
-        <span id="reportProjectTitle"></span>
-    </p>
+                <input
+                    id="projectLead"
+                    type="text"
+                    oninput="updateProjectDetails()"
+                >
+            </div>
 
-    <p>
-        <strong>Project Lead:</strong>
-        <span id="reportProjectLead"></span>
-    </p>
+            <div>
+                <label for="dateCompleted">Date Completed</label>
 
-    <p>
-        <strong>Date Completed:</strong>
-        <span id="reportDateCompleted"></span>
-    </p>
-</div>
+                <input
+                    type="date"
+                    id="dateCompleted"
+                    onchange="updateProjectDetails()"
+                >
+            </div>
 
-<hr style="margin:25px 0;">
+        </div>
 
-<h2>Total Score: <span id="totalScore">5</span>/25</h2>
+    </div>
 
-<p id="trafficLight"></p>
+    <div id="questions"></div>
 
-<h3>Level</h3>
-<p id="level"></p>
+    <div id="resultCard" class="card result">
 
-<h3>What it really means</h3>
-<p id="meaning"></p>
+        <div class="report-toolbar">
 
-<h3>Examples of engagement</h3>
-<ul id="engagement"></ul>
+            <button
+                type="button"
+                id="compactViewButton"
+                onclick="toggleCompactView()"
+            >
+                Show Compact Report
+            </button>
 
-<hr style="margin:30px 0;">
+        </div>
 
-<h2>Assessment Summary</h2>
-<div id="assessmentSummary"></div>
-    
-</div>
+        <div id="compactReport"></div>
+
+        <div class="report-details">
+
+            <h2>Project Details</h2>
+
+            <p>
+                <strong>Project Title:</strong>
+                <span id="reportProjectTitle"></span>
+            </p>
+
+            <p>
+                <strong>Project Lead:</strong>
+                <span id="reportProjectLead"></span>
+            </p>
+
+            <p>
+                <strong>Date Completed:</strong>
+                <span id="reportDateCompleted"></span>
+            </p>
+
+        </div>
+
+        <hr style="margin:25px 0;">
+
+        <h2>
+            Total Score:
+            <span id="totalScore">5</span>/25
+        </h2>
+
+        <p id="trafficLight"></p>
+
+        <h3>Level</h3>
+        <p id="level"></p>
+
+        <h3>What it really means</h3>
+        <p id="meaning"></p>
+
+        <h3>Examples of engagement</h3>
+        <ul id="engagement"></ul>
+
+        <hr style="margin:30px 0;">
+
+        <h2>Assessment Summary</h2>
+
+        <div id="assessmentSummary"></div>
+
+    </div>
 
 </div>
 
 <script>
 
 const questions = [
-{
-title:"1. Clarity – How well-defined is the problem?",
-name:"Clarity"
-},
-{
-title:"2. Impact – What is the magnitude of effect on patients?",
-name:"Impact"
-},
-{
-title:"3. Representation Gap – Are there any voices missing?",
-name:"Representation Gap"
-},
-{
-title:"4. Complexity – How complex is the system/journey?",
-name:"Complexity"
-},
-{
-title:"5. Assumption Risk – What is the risk of getting it wrong without lived experience?",
-name:"Assumption Risk"
-}
+    {
+        title:"1. Clarity – How well-defined is the problem?",
+        name:"Clarity",
+        scores:[
+            "Problem is very clear, well-defined, and evidence-based; lived experience unlikely to add new insight.",
+            "Mostly clear, minor uncertainties.",
+            "Some ambiguity; multiple interpretations possible.",
+            "Significant uncertainty about needs, pathways, or experience.",
+            "Very unclear problem; lived experience essential to define the issue."
+        ],
+        guidance:"Higher score = greater need to include lived experience to understand the problem itself."
+    },
+    {
+        title:"2. Impact – What is the magnitude of effect on patients?",
+        name:"Impact",
+        scores:[
+            "Minimal impact on patients (e.g., admin/process change).",
+            "Limited impact or affects a small group.",
+            "Moderate impact on outcomes or experience.",
+            "High impact on quality of life, outcomes, or access.",
+            "Critical impact (safety, dignity, or major outcomes)."
+        ],
+        guidance:"Higher score = stronger justification for involving lived experience voices."
+    },
+    {
+        title:"3. Representation Gap – Are there any voices missing?",
+        name:"Representation Gap",
+        scores:[
+            "Well-represented population; extensive prior engagement.",
+            "Some representation exists, with minor gaps.",
+            "Mixed representation; some groups are missing.",
+            "Significant groups are underrepresented.",
+            "Major representation gaps (e.g., marginalised or seldom-heard groups)."
+        ],
+        guidance:"Higher score = ethical and equity imperative to involve lived experience."
+    },
+    {
+        title:"4. Complexity – How complex is the system/journey?",
+        name:"Complexity",
+        scores:[
+            "Simple, linear pathway; little variation.",
+            "Mostly straightforward with few variables.",
+            "Moderate complexity (multiple steps or services).",
+            "Complex system with multiple interactions and variation.",
+            "Highly complex, fragmented, or poorly understood system."
+        ],
+        guidance:"Higher score = lived experience needed to navigate and explain real-world pathways."
+    },
+    {
+        title:"5. Assumption Risk – What is the risk of getting it wrong without lived experience?",
+        name:"Assumption Risk",
+        scores:[
+            "Low risk; evidence and understanding are strong.",
+            "Some assumptions, but unlikely to affect outcomes significantly.",
+            "Moderate risk of incorrect assumptions.",
+            "High risk that assumptions will lead to ineffective solutions.",
+            "Very high risk of harm, failure, or inequality without lived experience input."
+        ],
+        guidance:"Higher score = involving people is critical to avoid designing the wrong solution."
+    }
 ];
 
 const container = document.getElementById("questions");
 
-questions.forEach((q,i)=>{
+questions.forEach((question,index) => {
 
-const card=document.createElement("div");
-card.className="card";
+    const card = document.createElement("div");
+    card.className = "card";
 
-card.innerHTML=`
-<h2>${q.title}</h2>
+    card.innerHTML = `
+        <h2>${question.title}</h2>
 
-<select class="score" onchange="calculateScore()">
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-</select>
+        <div class="score-description">
 
-<label style="display:block; margin-top:20px;">
-    Rationale / Comments
-</label>
+            <p class="score-description-title">
+                <strong>Score Description</strong>
+            </p>
 
-<textarea id="comment${i}" oninput="calculateScore()"></textarea>
-`;
+            <p>
+                <strong>1:</strong>
+                ${question.scores[0]}
+            </p>
 
-container.appendChild(card);
+            <p>
+                <strong>2:</strong>
+                ${question.scores[1]}
+            </p>
+
+            <p>
+                <strong>3:</strong>
+                ${question.scores[2]}
+            </p>
+
+            <p>
+                <strong>4:</strong>
+                ${question.scores[3]}
+            </p>
+
+            <p>
+                <strong>5:</strong>
+                ${question.scores[4]}
+            </p>
+
+            <p class="score-guidance">
+                <strong>${question.guidance}</strong>
+            </p>
+
+        </div>
+
+        <label for="score${index}">
+            Select score
+        </label>
+
+        <select
+            id="score${index}"
+            class="score"
+            onchange="calculateScore()"
+        >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <label
+            for="comment${index}"
+            style="display:block; margin-top:20px;"
+        >
+            Rationale / Comments
+        </label>
+
+        <textarea
+            id="comment${index}"
+            oninput="calculateScore()"
+            placeholder="Enter the rationale for the selected score"
+        ></textarea>
+    `;
+
+    container.appendChild(card);
 
 });
 
 function calculateScore(){
 
-let score=0;
+    let totalScore = 0;
 
-document.querySelectorAll(".score").forEach(x=>{
-score += Number(x.value);
-});
+    document.querySelectorAll(".score").forEach(scoreField => {
+        totalScore += Number(scoreField.value);
+    });
 
-document.getElementById("totalScore").innerText=score;
+    document.getElementById("totalScore").innerText = totalScore;
 
-const resultCard=document.getElementById("resultCard");
+    const resultCard = document.getElementById("resultCard");
 
-let icon="";
-let level="";
-let meaning="";
-let engagement=[];
+    let icon = "";
+    let level = "";
+    let meaning = "";
+    let engagement = [];
 
-if(score <= 8){
+    if(totalScore <= 8){
 
-icon="🟢 Green";
-level="Light validation required";
-meaning="You mostly understand this but sense check with users.";
-engagement=["Surveys","Feedback"];
+        icon = "🟢 Green";
+        level = "Light validation required";
+        meaning = "You mostly understand this but sense check with users.";
 
-resultCard.className="card result green";
+        engagement = [
+            "Surveys",
+            "Feedback"
+        ];
 
-}
-else if(score <=16){
+        resultCard.className = "card result green";
 
-icon="🟠 Amber";
-level="Targeted engagement required";
-meaning="You have gaps so involve people to refine understanding and learn from them.";
-engagement=[
-"15 Steps",
-"Interviews & Workshops",
-"Mapping",
-"Story Board"
-];
+    }
+    else if(totalScore <= 16){
 
-resultCard.className="card result amber";
+        icon = "🟠 Amber";
+        level = "Targeted engagement required";
 
-}
-else{
+        meaning =
+            "You have gaps so involve people to refine understanding and learn from them.";
 
-icon="🔴 Red";
-level="Deep co-production required";
-meaning="You don't understand this well enough yet so users must shape the problem.";
-engagement=[
-"15 Steps",
-"Interviews & Workshops",
-"Mapping",
-"Story Board",
-"Design with People / Co-design"
-];
+        engagement = [
+            "15 Steps",
+            "Interviews & Workshops",
+            "Mapping",
+            "Story Board"
+        ];
 
-resultCard.className="card result red";
+        resultCard.className = "card result amber";
 
-}
+    }
+    else{
 
-document.getElementById("trafficLight").innerHTML="<strong>Traffic Light:</strong> " + icon;
-document.getElementById("level").innerText=level;
-document.getElementById("meaning").innerText=meaning;
+        icon = "🔴 Red";
+        level = "Deep co-production required";
 
-const ul=document.getElementById("engagement");
-ul.innerHTML="";
+        meaning =
+            "You don't understand this well enough yet so users must shape the problem.";
 
-engagement.forEach(item=>{
-const li=document.createElement("li");
-li.innerText=item;
-ul.appendChild(li);
-});
+        engagement = [
+            "15 Steps",
+            "Interviews & Workshops",
+            "Mapping",
+            "Story Board",
+            "Design with People / Co-design"
+        ];
 
-let summaryHTML = "";
+        resultCard.className = "card result red";
 
-questions.forEach((q, i) => {
+    }
 
-    const score =
-        document.querySelectorAll(".score")[i].value;
+    document.getElementById("trafficLight").innerHTML =
+        "<strong>Traffic Light:</strong> " + icon;
 
-    const comments =
-        document.getElementById("comment"+i).value || "No comments provided";
+    document.getElementById("level").innerText = level;
+    document.getElementById("meaning").innerText = meaning;
 
-    summaryHTML += `
-        <div style="margin-bottom:20px;">
-            <strong>${q.name}</strong><br>
-            <strong>Score:</strong> ${score}<br><br>
-            <strong>Comments:</strong><br>
-            ${comments}
-        </div>
-    `;
-});
+    const engagementList =
+        document.getElementById("engagement");
 
-document.getElementById("assessmentSummary").innerHTML = summaryHTML;
+    engagementList.innerHTML = "";
+
+    engagement.forEach(item => {
+
+        const listItem =
+            document.createElement("li");
+
+        listItem.innerText = item;
+
+        engagementList.appendChild(listItem);
+
+    });
+
+    let summaryHTML = "";
+
+    questions.forEach((question,index) => {
+
+        const selectedScore =
+            document.querySelectorAll(".score")[index].value;
+
+        const comments =
+            document.getElementById("comment" + index).value ||
+            "No comments provided";
+
+        summaryHTML += `
+            <div style="margin-bottom:20px;">
+
+                <strong>${escapeHTML(question.name)}</strong>
+                <br>
+
+                <strong>Score:</strong>
+                ${escapeHTML(selectedScore)}
+                <br><br>
+
+                <strong>Comments:</strong>
+                <br>
+
+                ${escapeHTML(comments)}
+
+            </div>
+        `;
+
+    });
+
+    document.getElementById("assessmentSummary").innerHTML =
+        summaryHTML;
 
 }
 
 function updateProjectDetails(){
 
     document.getElementById("reportProjectTitle").innerText =
-        document.getElementById("projectTitle").value || "Not provided";
+        document.getElementById("projectTitle").value ||
+        "Not provided";
 
     document.getElementById("reportProjectLead").innerText =
-        document.getElementById("projectLead").value || "Not provided";
+        document.getElementById("projectLead").value ||
+        "Not provided";
 
-    const dateValue = document.getElementById("dateCompleted").value;
+    const dateValue =
+        document.getElementById("dateCompleted").value;
 
-    if (dateValue) {
+    if(dateValue){
+
         const parts = dateValue.split("-");
-        const formattedDate = parts[2] + "/" + parts[1] + "/" + parts[0];
+
+        const formattedDate =
+            parts[2] + "/" + parts[1] + "/" + parts[0];
 
         document.getElementById("reportDateCompleted").innerText =
             formattedDate;
-    } else {
+
+    }
+    else{
+
         document.getElementById("reportDateCompleted").innerText =
             "Not provided";
+
     }
 
 }
 
-
 function escapeHTML(value){
 
-    const temporaryElement = document.createElement("div");
-    temporaryElement.textContent = String(value);
+    const temporaryElement =
+        document.createElement("div");
+
+    temporaryElement.textContent =
+        String(value);
 
     return temporaryElement.innerHTML;
 
 }
 
-
 function toggleCompactView(){
 
-    const body = document.body;
-    const button = document.getElementById("compactViewButton");
-    const compactReport = document.getElementById("compactReport");
+    const body =
+        document.body;
+
+    const button =
+        document.getElementById("compactViewButton");
+
+    const compactReport =
+        document.getElementById("compactReport");
 
     const isEnteringCompactMode =
         !body.classList.contains("compact-mode");
@@ -507,10 +700,12 @@ function toggleCompactView(){
     if(isEnteringCompactMode){
 
         const projectTitle =
-            document.getElementById("projectTitle").value || "Not provided";
+            document.getElementById("projectTitle").value ||
+            "Not provided";
 
         const projectLead =
-            document.getElementById("projectLead").value || "Not provided";
+            document.getElementById("projectLead").value ||
+            "Not provided";
 
         const dateCompleted =
             document.getElementById("reportDateCompleted").innerText ||
@@ -521,22 +716,24 @@ function toggleCompactView(){
 
         const trafficLight =
             document.getElementById("trafficLight").innerText
-                .replace("Traffic Light:", "")
+                .replace("Traffic Light:","")
                 .trim();
 
         const engagementLevel =
             document.getElementById("level").innerText;
 
         const engagementExamples =
-            Array.from(document.querySelectorAll("#engagement li"))
-                .map(item => item.innerText)
-                .join(" • ");
+            Array.from(
+                document.querySelectorAll("#engagement li")
+            )
+            .map(item => item.innerText)
+            .join(" • ");
 
         let assessmentItems = "";
 
-        questions.forEach((question, index) => {
+        questions.forEach((question,index) => {
 
-            const score =
+            const selectedScore =
                 document.querySelectorAll(".score")[index].value;
 
             const comments =
@@ -545,37 +742,62 @@ function toggleCompactView(){
 
             assessmentItems += `
                 <div class="compact-item">
+
                     <div class="compact-item-title">
-                        ${escapeHTML(question.name)} | ${escapeHTML(score)}
+                        ${escapeHTML(question.name)}
+                        |
+                        ${escapeHTML(selectedScore)}
                     </div>
 
                     <p class="compact-item-comments">
                         <strong>Comments:</strong>
                         ${escapeHTML(comments)}
                     </p>
+
                 </div>
             `;
+
         });
 
         compactReport.innerHTML = `
             <p class="compact-project-line">
-                <strong>Project:</strong> ${escapeHTML(projectTitle)}
+
+                <strong>Project:</strong>
+                ${escapeHTML(projectTitle)}
+
                 &nbsp; | &nbsp;
-                <strong>Lead:</strong> ${escapeHTML(projectLead)}
+
+                <strong>Lead:</strong>
+                ${escapeHTML(projectLead)}
+
                 &nbsp; | &nbsp;
-                <strong>Date:</strong> ${escapeHTML(dateCompleted)}
+
+                <strong>Date:</strong>
+                ${escapeHTML(dateCompleted)}
+
             </p>
 
             <p class="compact-result-line">
-                <strong>Score:</strong> ${escapeHTML(totalScore)}/25
+
+                <strong>Score:</strong>
+                ${escapeHTML(totalScore)}/25
+
                 &nbsp; | &nbsp;
+
                 ${escapeHTML(trafficLight)}
-                <strong>${escapeHTML(engagementLevel)}</strong>
+
+                <strong>
+                    ${escapeHTML(engagementLevel)}
+                </strong>
+
             </p>
 
             <p class="compact-engagement-line">
+
                 <strong>Examples of engagement:</strong>
+
                 ${escapeHTML(engagementExamples)}
+
             </p>
 
             <div class="compact-assessments">
@@ -584,17 +806,22 @@ function toggleCompactView(){
         `;
 
         body.classList.add("compact-mode");
-        button.innerText = "Return to Full Assessment";
+
+        button.innerText =
+            "Return to Full Assessment";
 
         document.getElementById("resultCard").scrollIntoView({
             behavior:"smooth",
             block:"start"
         });
 
-    } else {
+    }
+    else{
 
         body.classList.remove("compact-mode");
-        button.innerText = "Show Compact Report";
+
+        button.innerText =
+            "Show Compact Report";
 
         window.scrollTo({
             top:0,
@@ -605,10 +832,12 @@ function toggleCompactView(){
 
 }
 
+/* Set today's date */
 
-// Set today's date
 document.getElementById("dateCompleted").value =
-new Date().toISOString().split("T")[0];
+    new Date().toISOString().split("T")[0];
+
+/* Initialise the assessment */
 
 calculateScore();
 updateProjectDetails();
