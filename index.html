@@ -217,27 +217,6 @@ body.compact-mode #resultCard{
     }
 }
 
-.score-description{
-    background:#f4f6f8;
-    border-left:4px solid #003087;
-    padding:12px 15px;
-    margin:12px 0 18px 0;
-    border-radius:4px;
-    font-size:14px;
-    line-height:1.4;
-}
-
-.score-description p{
-    margin:6px 0;
-}
-
-.score-guidance{
-    margin-top:12px !important;
-    padding-top:10px;
-    border-top:1px solid #cccccc;
-    color:#003087;
-}
-
 </style>
 </head>
 
@@ -336,57 +315,26 @@ Complete the questions below to determine the appropriate level of engagement.
 
 const questions = [
 {
-    title:"1. Clarity – How well-defined is the problem?",
-    name:"Clarity",
-    descriptions:[
-        "Problem is very clear, well-defined, and evidence-based; lived experience unlikely to add new insight.",
-        "Mostly clear, minor uncertainties.",
-        "Some ambiguity; multiple interpretations possible.",
-        "Significant uncertainty about needs, pathways, or experience.",
-        "Very unclear problem; lived experience essential to define the issue."
-    ],
-    guidance:"Higher score = greater need to include lived experience to understand the problem itself."
+title:"1. Clarity – How well-defined is the problem?",
+name:"Clarity"
 },
 {
-    title:"2. Impact – What is the magnitude of effect on patients?",
-    name:"Impact",
-    descriptions:[
-        "Minimal impact on patients (e.g., admin/process change).",
-        "Limited impact or affects small group.",
-        "Moderate impact on outcomes or experience.",
-        "High impact on quality of life, outcomes, or access.",
-        "Critical impact (safety, dignity, major outcomes)."
-    ],
-    guidance:"Higher score = stronger justification for involving lived experience voices."
+title:"2. Impact – What is the magnitude of effect on patients?",
+name:"Impact"
 },
 {
-    title:"3. Representation Gap – Are there any voices missing?",
-    name:"Representation Gap",
-    descriptions:[
-        "Well-represented population; extensive prior engagement.",
-        "Some representation exists, minor gaps.",
-        "Mixed representations; some groups missing.",
-        "Significant groups underrepresented.",
-        "Major representation gaps (e.g., marginalised or seldom-heard groups)."
-    ],
-    guidance:"Higher score = ethical and equity imperative to involve lived experience."
+title:"3. Representation Gap – Are there any voices missing?",
+name:"Representation Gap"
 },
 {
-    title:"4. Complexity – How complex is the system/journey?",
-    name:"Complexity",
-    descriptions:[
-        "Simple, linear pathway; little variation.",
-        "Mostly straightforward with few variables.",
-        "Moderate complexity (multiple steps or services).",
-        "Complex system with multiple interactions and variation.",
-        "Highly complex, fragmented, or poorly understood system."
-    ],
-    guidance:"Higher score = lived experience needed to navigate and explain real-world pathways."
+title:"4. Complexity – How complex is the system/journey?",
+name:"Complexity"
 },
 {
-    title:"5. Assumption Risk – What is the risk of getting it wrong without lived experience?",
-    name:"Assumption Risk",
-    descriptions
+title:"5. Assumption Risk – What is the risk of getting it wrong without lived experience?",
+name:"Assumption Risk"
+}
+];
 
 const container = document.getElementById("questions");
 
@@ -397,20 +345,6 @@ card.className="card";
 
 card.innerHTML=`
 <h2>${q.title}</h2>
-
-<div class="score-description">
-    <strong>Score Description:</strong>
-
-    <p><strong>1:</strong> ${q.descriptions[0]}</p>
-    <p><strong>2:</strong> ${q.descriptions[1]}</p>
-    <p><strong>3:</strong> ${q.descriptions[2]}</p>
-    <p><strong>4:</strong> ${q.descriptions[3]}</p>
-    <p><strong>5:</strong> ${q.descriptions[4]}</p>
-
-    <p class="score-guidance">
-        <strong>${q.guidance}</strong>
-    </p>
-</div>
 
 <select class="score" onchange="calculateScore()">
 <option value="1">1</option>
