@@ -482,16 +482,16 @@ questions.forEach((question,index) => {
         </label>
 
         <select
-            id="score${index}"
-            class="score"
-            onchange="calculateScore()"
-        >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
+    id="score${index}"
+    class="score"
+    onchange="calculateScore()"
+>
+    ${question.scores.map((description, scoreIndex) => `
+        <option value="${scoreIndex + 1}">
+            ${scoreIndex + 1} - ${description}
+        </option>
+    `).join("")}
+</select>
 
         <label
             for="comment${index}"
@@ -613,6 +613,9 @@ function calculateScore(){
             document.getElementById("comment" + index).value ||
             "No comments provided";
 
+        const selectedDescription =
+    question.scores[Number(selectedScore) - 1];
+
         summaryHTML += `
             <div style="margin-bottom:20px;">
 
@@ -621,6 +624,8 @@ function calculateScore(){
 
                 <strong>Score:</strong>
                 ${escapeHTML(selectedScore)}
+                –
+                ${escapeHTML(selectedDescription)}
                 <br><br>
 
                 <strong>Comments:</strong>
@@ -734,6 +739,8 @@ function toggleCompactView(){
         questions.forEach((question,index) => {
 
             const selectedScore =
+            const selectedDescription =
+                question.scores[Number(selectedScore) - 1];
                 document.querySelectorAll(".score")[index].value;
 
             const comments =
@@ -744,10 +751,14 @@ function toggleCompactView(){
                 <div class="compact-item">
 
                     <div class="compact-item-title">
-                        ${escapeHTML(question.name)}
-                        |
-                        ${escapeHTML(selectedScore)}
-                    </div>
+                    ${escapeHTML(question.name)}
+                    |
+                    ${escapeHTML(selectedScore)
+                      </div>
+                      <p class="compact-item-comments"
+                      <strong>Score description:</strong>
+                      ${escapeHTML(selectedDescription)
+                    </p>
 
                     <p class="compact-item-comments">
                         <strong>Comments:</strong>
