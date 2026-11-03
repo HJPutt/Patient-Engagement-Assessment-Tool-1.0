@@ -736,40 +736,41 @@ function toggleCompactView(){
 
         let assessmentItems = "";
 
-        questions.forEach((question,index) => {
+      questions.forEach((question,index) => {
 
-            const selectedScore =
-            const selectedDescription =
-                question.scores[Number(selectedScore) - 1];
-                document.querySelectorAll(".score")[index].value;
+    const selectedScore =
+        document.querySelectorAll(".score")[index].value;
 
-            const comments =
-                document.getElementById("comment" + index).value ||
-                "No comments provided";
+    const selectedDescription =
+        question.scores[Number(selectedScore) - 1];
 
-            assessmentItems += `
-                <div class="compact-item">
+    const comments =
+        document.getElementById("comment" + index).value ||
+        "No comments provided";
 
-                    <div class="compact-item-title">
-                    ${escapeHTML(question.name)}
-                    |
-                    ${escapeHTML(selectedScore)
-                      </div>
-                      <p class="compact-item-comments"
-                      <strong>Score description:</strong>
-                      ${escapeHTML(selectedDescription)
-                    </p>
+    assessmentItems += `
+        <div class="compact-item">
 
-                    <p class="compact-item-comments">
-                        <strong>Comments:</strong>
-                        ${escapeHTML(comments)}
-                    </p>
+            <div class="compact-item-title">
+                ${escapeHTML(question.name)}
+                |
+                ${escapeHTML(selectedScore)}
+            </div>
 
-                </div>
-            `;
+            <p class="compact-item-comments">
+                <strong>Score description:</strong>
+                ${escapeHTML(selectedDescription)}
+            </p>
 
-        });
+            <p class="compact-item-comments" style="margin-top:6px;">
+                <strong>Comments:</strong>
+                ${escapeHTML(comments)}
+            </p>
 
+        </div>
+    `;
+
+});
         compactReport.innerHTML = `
             <p class="compact-project-line">
 
